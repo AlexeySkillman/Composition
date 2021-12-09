@@ -1,10 +1,11 @@
-package ru.sumin.composition.presentation
+package com.example.composition.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.composition.R
 import com.example.composition.databinding.FragmentWelcomeBinding
 import java.lang.RuntimeException
 
@@ -29,12 +30,22 @@ class WelcomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonUnderstand.setOnClickListener(){
-
+            launchChooseLevelFragment()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    // Функция Вызова Следующего фрагмента ChooseLevelFragment
+    private fun launchChooseLevelFragment(){
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, ChooseLevelFragment.newInstance()) // ChooseLevelFragment.newInstance() - Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
+            .addToBackStack(ChooseLevelFragment.NAME) // При открытие Фрагмента мы добавляем BacckStack c именем ChooseLevelFragment.NAME чтобы создать точку к которой можно было бы возвращаться
+            .commit()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
+
 }
