@@ -37,7 +37,6 @@ class GameFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         // Передача в активити нужного CallBack для BackStack
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -45,6 +44,9 @@ class GameFinishedFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        binding.buttonRetry.setOnClickListener(){
+            retryGame()
+        }
 
     }
 
@@ -54,7 +56,9 @@ class GameFinishedFragment : Fragment() {
     }
 
     private fun parseArgs(){
-        gameResult = requireArguments().getSerializable(KEY_GAME_RESULT) as GameResult // Получаем обьект в виде Serializable getSerializable
+        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULT)?.let{
+            gameResult = it
+        } // Получаем обьект в виде Parcelable getParcelable
     }
 
     // Функция для установки нужного BackStack
@@ -72,7 +76,7 @@ class GameFinishedFragment : Fragment() {
         fun newInstance(gameResult: GameResult): GameFinishedFragment {
             return  GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_GAME_RESULT, gameResult) // Передаем обьект в виде Serializable putSerializable
+                    putParcelable(KEY_GAME_RESULT, gameResult) // Передаем обьект в виде Parcelable putParcelable
                 }
             }
         }

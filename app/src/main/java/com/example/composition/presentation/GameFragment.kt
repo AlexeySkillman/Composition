@@ -56,7 +56,9 @@ class GameFragment : Fragment() {
     }
 
     private fun parseArgs(){
-        level = requireArguments().getSerializable(KEY_LEVEL) as Level // Получаем обьект в виде Serializable getSerializable
+        requireArguments().getParcelable<Level>(KEY_LEVEL)?.let{
+            level = it
+        } // Получаем обьект в виде Parcelable getParcelable
         // Log.d("FragmentGameBinding", level.toString())
     }
 
@@ -78,7 +80,7 @@ class GameFragment : Fragment() {
         fun newInstance(level: Level): GameFragment {
             return GameFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_LEVEL, level) // Передаем обьект в виде Serializable putSerializable
+                    putParcelable(KEY_LEVEL, level) // Передаем обьект в виде Parcelable putParcelable
                 }
             }
         }
