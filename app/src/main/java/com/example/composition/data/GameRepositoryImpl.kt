@@ -14,14 +14,16 @@ object GameRepositoryImpl: GameRepository {
     private const val MIN_ANSWER_VALUE = 1
 
     override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
+        // options.add() ложит числа хаотично
+
         val sum = Random.nextInt(MIN_SUM_VALUE, maxSumValue + 1 ) // Чтобы максимальное значение тоже было сгенированно
         val visibleNumber = Random.nextInt(MIN_ANSWER_VALUE, sum)
         // Создаем коллекцию вариантов ответа
         val options = HashSet<Int>()
         val rightAnswer = sum - visibleNumber
         options.add(rightAnswer) // Ложим правильный ответ
-        val from = max( rightAnswer - countOfOptions, MIN_ANSWER_VALUE)
-        val to = min(maxSumValue - 1 , rightAnswer + countOfOptions )
+        val from = max( rightAnswer - countOfOptions, MIN_ANSWER_VALUE) //  - Получаем Большее из 2 чисел
+        val to = min(maxSumValue - 1 , rightAnswer + countOfOptions ) // - Возвращает меньшее из двух значений
         while (options.size < countOfOptions ){
             options.add(Random.nextInt(from, to)) // Ложим Неправильные ответы
         }
