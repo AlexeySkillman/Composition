@@ -70,6 +70,7 @@ class GameViewModel(application: Application): AndroidViewModel(application) { /
         getGameSettings(level) // Получаем Настройки Игры (Сложность и тд)
         startTimer() // Запускаем таймер
         generateQuestion() // Генерируем вопрос
+        updateProgress() // Обновим прогресс при старете и последующее в функции chooseAnswer
     }
     // Вывели в отдельный метод настройки , чтобы не захламлять функцию startGame()
     private fun getGameSettings(level: Level){
@@ -86,7 +87,7 @@ class GameViewModel(application: Application): AndroidViewModel(application) { /
         ){
             override fun onTick(millisUntilFinished: Long) {
                 // Форматируем время в понятный вид
-                formatTime(millisUntilFinished)
+                _formattedTime.value = formatTime(millisUntilFinished)
             }
 
             override fun onFinish() {
@@ -111,11 +112,14 @@ class GameViewModel(application: Application): AndroidViewModel(application) { /
             countOfRightAnswers,
             gameSettings.minCountOfRightAnswers
         )
-        _enoughPercent.value = countOfRightAnswers >= gameSettings.minCountOfRightAnswers
+        _enoughCount.value = countOfRightAnswers >= gameSettings.minCountOfRightAnswers
         _enoughPercent.value = percent >= gameSettings.minPercentOfRightAnswers
     }
     // Вфчесляем процент правильных ответов
     private fun calculatePercentOfRightAnswers(): Int {
+        if (countOfQuestions == 0 ){ // Возвращаем 0 при старте приложения
+            return 0
+        }
         return ((countOfRightAnswers / countOfQuestions.toDouble()) * 100).toInt()
     }
     // END --- Следим за прогрессом
