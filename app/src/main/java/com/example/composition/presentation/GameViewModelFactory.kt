@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.composition.domain.entity.Level
 
+
 // Если мы хотим передать во ViewModel какие нибудь параметры то
 // используем ViewModelFactory
 class GameViewModelFactory(

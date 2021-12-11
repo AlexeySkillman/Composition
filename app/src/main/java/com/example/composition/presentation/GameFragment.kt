@@ -18,6 +18,7 @@ import com.example.composition.domain.entity.GameSettings
 import com.example.composition.domain.entity.Level
 import java.lang.RuntimeException
 
+
 class GameFragment : Fragment() {
 
     private lateinit var level: Level

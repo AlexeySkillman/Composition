@@ -12,6 +12,7 @@ import com.example.composition.databinding.FragmentGameFinishedBinding
 import com.example.composition.domain.entity.GameResult
 import java.lang.RuntimeException
 
+
 class GameFinishedFragment : Fragment() {
 
     private lateinit var gameResult: GameResult
