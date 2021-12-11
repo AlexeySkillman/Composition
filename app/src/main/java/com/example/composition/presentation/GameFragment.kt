@@ -22,12 +22,14 @@ class GameFragment : Fragment() {
 
     private lateinit var level: Level
 
-    private val viewModel: GameViewModel by lazy { // Подключаем VieModel // lazy - при первом обращение код проанализируется
-        ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[GameViewModel::class.java]
+    // Подключаем VieModel // lazy - при первом обращение код проанализируется
+    private val viewModelFactory by lazy {
+        GameViewModelFactory( level, requireActivity().application)
     }
+    private val viewModel: GameViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
+    }
+
     // так как с кнопками придется работать не один раз делаем коллекцию из кнопок
     private val tvOptions by lazy { // lazy - при первом обращение код проанализируется (И к этому моменту фрагмент уже будет собран когда будем обращаться)
         mutableListOf<TextView>().apply{
@@ -64,7 +66,6 @@ class GameFragment : Fragment() {
 
         observeViewModel()
         setClickListenersToOptions()
-        viewModel.startGame(level)
     }
 
     private fun setClickListenersToOptions(){
