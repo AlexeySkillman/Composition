@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.composition.R
 import com.example.composition.data.GameRepositoryImpl
 import com.example.composition.domain.entity.GameResult
@@ -15,13 +16,13 @@ import com.example.composition.domain.usecases.GenerateQuestionUseCase
 import com.example.composition.domain.usecases.GetGameSettingsUseCase
 
 // Параметр application также передается в AndroidViewModel (Он должен быть типа Application )
-class GameViewModel(application: Application): AndroidViewModel(application) { // Будем пользоваться контекстом, чтобы получить ресурсы
-
+class GameViewModel(
+    private val level: Level,
+    private val application: Application // Context нельзя передавать во ViewModel поэтому передаем Application
+): ViewModel() {
 
     private lateinit var gameSettings: GameSettings
-    private lateinit var level: Level
 
-    private val context = application
     private val repository = GameRepositoryImpl
 
     private val generateQuestionUseCase = GenerateQuestionUseCase(repository)
@@ -65,16 +66,19 @@ class GameViewModel(application: Application): AndroidViewModel(application) { /
     private var countOfRightAnswers = 0
     private var countOfQuestions = 0
 
+    init {
+        startGame()
+    }
+
     // На страте мы получаем Уровень (Level)
-    fun  startGame(level: Level){
-        getGameSettings(level) // Получаем Настройки Игры (Сложность и тд)
+    private fun  startGame(){
+        getGameSettings() // Получаем Настройки Игры (Сложность и тд)
         startTimer() // Запускаем таймер
         generateQuestion() // Генерируем вопрос
         updateProgress() // Обновим прогресс при старете и последующее в функции chooseAnswer
     }
     // Вывели в отдельный метод настройки , чтобы не захламлять функцию startGame()
-    private fun getGameSettings(level: Level){
-        this.level = level
+    private fun getGameSettings(){
         this.gameSettings = getGameSettingsUseCase(level)
         _minPercent.value = gameSettings.minPercentOfRightAnswers
     }
@@ -108,7 +112,7 @@ class GameViewModel(application: Application): AndroidViewModel(application) { /
         val percent = calculatePercentOfRightAnswers()
         _percentOfRightAnswers.value = percent
         _progressAnswers.value = String.format(
-            context.resources.getString(R.string.progress_answers),
+            application.resources.getString(R.string.progress_answers),
             countOfRightAnswers,
             gameSettings.minCountOfRightAnswers
         )
