@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.composition.R
 import com.example.composition.databinding.FragmentGameBinding
 import com.example.composition.domain.entity.GameResult
@@ -135,16 +136,26 @@ class GameFragment : Fragment() {
 
     // Функция Вызова Следующего фрагмента GameFinishedFragment
     private fun launchGameFinishedFragment(gameResult: GameResult){
+
+        // Jetpack Navigation
+        val args = Bundle().apply {
+            putParcelable( GameFinishedFragment.KEY_GAME_RESULT , gameResult)
+        }
+        findNavController().navigate(R.id.action_gameFragment_to_gameFinishedFragment, args)
+
+        /*
+        До  Jetpack Navigation
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, GameFinishedFragment.newInstance(gameResult))
             .addToBackStack(null)
             .commit()
+        */
     }
 
     companion object {
 
         const val NAME = "GameFragment"
-        private const val KEY_LEVEL = "level"
+        const val KEY_LEVEL = "level"
 
         // Функция для Вызова Текущего Фрагмента в предыдущем фрагменте (В данном случаи не передаются параметры)
         // Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры

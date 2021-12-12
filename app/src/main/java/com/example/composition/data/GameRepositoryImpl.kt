@@ -37,7 +37,7 @@ object GameRepositoryImpl: GameRepository {
                     10,
                     3,
                     50,
-                    8
+                    4
                 )
             }
             Level.EASY -> {

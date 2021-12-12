@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.composition.R
 import com.example.composition.databinding.FragmentWelcomeBinding
 import java.lang.RuntimeException
@@ -36,10 +37,16 @@ class WelcomeFragment : Fragment() {
 
     // Функция Вызова Следующего фрагмента ChooseLevelFragment
     private fun launchChooseLevelFragment(){
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ChooseLevelFragment.newInstance()) // ChooseLevelFragment.newInstance() - Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
-            .addToBackStack(ChooseLevelFragment.NAME) // При открытие Фрагмента мы добавляем BacckStack c именем ChooseLevelFragment.NAME чтобы создать точку к которой можно было бы возвращаться
-            .commit()
+        // Jetpack Navigation
+        findNavController().navigate(R.id.action_welcomeFragment_to_chooseLevelFragment2)
+
+        /*
+            До  Jetpack Navigation
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.main_container, ChooseLevelFragment.newInstance()) // ChooseLevelFragment.newInstance() - Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
+                .addToBackStack(ChooseLevelFragment.NAME) // При открытие Фрагмента мы добавляем BacckStack c именем ChooseLevelFragment.NAME чтобы создать точку к которой можно было бы возвращаться
+                .commit()
+        */
 
     }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.composition.R
 import com.example.composition.databinding.FragmentChooseLevelBinding
 import com.example.composition.domain.entity.Level
@@ -51,10 +52,20 @@ class ChooseLevelFragment : Fragment() {
 
     // Функция Вызова Следующего фрагмента GameFragment
     private fun launchGameFragment(level: Level){
+
+        // Jetpack Navigation
+        val args = Bundle().apply {
+            putParcelable( GameFragment.KEY_LEVEL , level)
+        }
+        findNavController().navigate(R.id.action_chooseLevelFragment2_to_gameFragment, args)
+
+        /*
+        До  Jetpack Navigation
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, GameFragment.newInstance(level)) // ChooseLevelFragment.newInstance() - Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
             .addToBackStack(GameFragment.NAME) // При открытие Фрагмента мы добавляем BacckStack c именем GameFragment.NAME чтобы создать точку к которой можно было бы возвращаться
             .commit()
+        */
 
     }
 
