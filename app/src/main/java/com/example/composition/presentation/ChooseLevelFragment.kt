@@ -53,44 +53,16 @@ class ChooseLevelFragment : Fragment() {
     // Функция Вызова Следующего фрагмента GameFragment
     private fun launchGameFragment(level: Level){
 
-        // Jetpack Navigation
-
-        /* Параметры передаем сами
-        val args = Bundle().apply {
-          putParcelable( GameFragment.KEY_LEVEL , level)
-        }
-        findNavController().navigate(R.id.action_chooseLevelFragment2_to_gameFragment, args)
-        */
-
         // Параметры передаем через Jetpack Navigation
         findNavController().navigate(
             ChooseLevelFragmentDirections.actionChooseLevelFragment2ToGameFragment(level)
         )
-
-        /*
-        До  Jetpack Navigation
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, GameFragment.newInstance(level)) // ChooseLevelFragment.newInstance() - Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
-            .addToBackStack(GameFragment.NAME) // При открытие Фрагмента мы добавляем BacckStack c именем GameFragment.NAME чтобы создать точку к которой можно было бы возвращаться
-            .commit()
-        */
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-
-        const val  NAME = "ChooseLevelFragment"
-
-        // Функция для Вызова Текущего Фрагмента в предыдущем фрагменте (В данном случаи не передаются параметры)
-        // Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
-        fun newInstance(): ChooseLevelFragment {
-            return  ChooseLevelFragment()
-        }
     }
 
 }

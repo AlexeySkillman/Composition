@@ -23,14 +23,11 @@ import java.lang.RuntimeException
 
 class GameFragment : Fragment() {
 
-    // private lateinit var level: Level
-
-    // Подключаем VieModel // lazy - при первом обращение код проанализируется
-
-
     // 1 way Jetpack Nav прием параметра
     private val args by navArgs<GameFragmentArgs>() // также как и lazy проинициализируется
 
+
+    // Подключаем VieModel // lazy - при первом обращение код проанализируется
     private val viewModelFactory by lazy {
         // 2 way Jetpack Nav прием параметра
         // val args = GameFragmentArgs.fromBundle(requireArguments())
@@ -58,13 +55,6 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentGameBinding == null")
-
-    /*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
-    */
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -138,51 +128,12 @@ class GameFragment : Fragment() {
         return ContextCompat.getColor(requireContext(),colorResId) // Вернет цвет в формате INT
     }
 
-   /*
-   private fun parseArgs(){
-        requireArguments().getParcelable<Level>(KEY_LEVEL)?.let{
-            level = it
-        } // Получаем обьект в виде Parcelable getParcelable
-        // Log.d("FragmentGameBinding", level.toString())
-    }
-    */
-
     // Функция Вызова Следующего фрагмента GameFinishedFragment
     private fun launchGameFinishedFragment(gameResult: GameResult){
 
-        // Jetpack Navigation
-        /* Параметры передаем сами
-        val args = Bundle().apply {
-            putParcelable( GameFinishedFragment.KEY_GAME_RESULT , gameResult)
-        }
-        findNavController().navigate(R.id.action_gameFragment_to_gameFinishedFragment, args)
-        */
+        findNavController().navigate(
+            GameFragmentDirections.actionGameFragmentToGameFinishedFragment(gameResult)
+        )
 
-        // Параметры передаем через Jetpack Navigation
-        findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameFinishedFragment(gameResult))
-
-        /*
-        До  Jetpack Navigation
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, GameFinishedFragment.newInstance(gameResult))
-            .addToBackStack(null)
-            .commit()
-        */
-    }
-
-    companion object {
-
-        const val NAME = "GameFragment"
-        const val KEY_LEVEL = "level"
-
-        // Функция для Вызова Текущего Фрагмента в предыдущем фрагменте (В данном случаи не передаются параметры)
-        // Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
-        fun newInstance(level: Level): GameFragment {
-            return GameFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_LEVEL, level) // Передаем обьект в виде Parcelable putParcelable
-                }
-            }
-        }
     }
 }

@@ -28,13 +28,6 @@ class GameFinishedFragment : Fragment() {
     private val binding: FragmentGameFinishedBinding
         get() = _binding ?: throw RuntimeException("FragmentGameFinishedBinding == null")
 
-    /*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
-    */
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,27 +40,11 @@ class GameFinishedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindViews()
         // Передача в активити нужного CallBack для BackStack
-
-
          setupClickListeners()
-
     }
 
     // Передача в активити нужного CallBack для BackStack
-    // При использовние библиотеки JepPuck Navigation не нужен
     private fun setupClickListeners(){
-
-        /*  При использовние библиотеки JepPuck Navigation не нужен
-
-        val callback = object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                retryGame()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
-        */
-
         binding.buttonRetry.setOnClickListener(){
             retryGame()
         }
@@ -95,24 +72,9 @@ class GameFinishedFragment : Fragment() {
         }
     }
 
-    /*
-    private fun parseArgs(){
-        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULT)?.let{
-            gameResult = it
-        } // Получаем обьект в виде Parcelable getParcelable
-    }
-    */
-
     // Функция для установки нужного BackStack
     private fun retryGame() {
-
         findNavController().popBackStack() // JepPuck Navigation
-
-        /*  При использовние библиотеки JepPuck Navigation не нужен
-
-            // requireActivity().supportFragmentManager.popBackStack(ChooseLevelFragment.NAME, 0) // Возвращает к данному фрагменту при press BackStack (flag 0)
-            requireActivity().supportFragmentManager.popBackStack(GameFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE ) // Возвращает к данному фрагменту при press BackStack и удаляет его тоже (Поэтому вернет предыдущий) (flag - FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        */
     }
 
     private fun getPercentOfRightAnswers() = with(args.gameResult){
@@ -137,18 +99,5 @@ class GameFinishedFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        const val KEY_GAME_RESULT = "game_result"
-
-        // Функция для Вызова Текущего Фрагмента в предыдущем фрагменте (В данном случаи передаются параметры)
-        // Чтобы в проекте был одинаковый подход и вбудущем позволит передавать параметры
-        fun newInstance(gameResult: GameResult): GameFinishedFragment {
-            return  GameFinishedFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_GAME_RESULT, gameResult) // Передаем обьект в виде Parcelable putParcelable
-                }
-            }
-        }
-    }
 
 }
