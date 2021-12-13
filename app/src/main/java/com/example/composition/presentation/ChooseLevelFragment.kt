@@ -54,10 +54,18 @@ class ChooseLevelFragment : Fragment() {
     private fun launchGameFragment(level: Level){
 
         // Jetpack Navigation
+
+        /* Параметры передаем сами
         val args = Bundle().apply {
-            putParcelable( GameFragment.KEY_LEVEL , level)
+          putParcelable( GameFragment.KEY_LEVEL , level)
         }
         findNavController().navigate(R.id.action_chooseLevelFragment2_to_gameFragment, args)
+        */
+
+        // Параметры передаем через Jetpack Navigation
+        findNavController().navigate(
+            ChooseLevelFragmentDirections.actionChooseLevelFragment2ToGameFragment(level)
+        )
 
         /*
         До  Jetpack Navigation
