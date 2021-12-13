@@ -35,7 +35,7 @@ object GameRepositoryImpl: GameRepository {
             Level.TEST -> {
                 GameSettings(
                     10,
-                    3,
+                    1,
                     50,
                     4
                 )

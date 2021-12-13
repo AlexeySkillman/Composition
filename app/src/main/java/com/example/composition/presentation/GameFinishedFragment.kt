@@ -38,7 +38,8 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViews()
+
+        binding.gameResult = args.gameResult
         // Передача в активити нужного CallBack для BackStack
          setupClickListeners()
     }
@@ -50,49 +51,10 @@ class GameFinishedFragment : Fragment() {
         }
     }
 
-    private fun bindViews(){
-        with(binding){
-            emojiResult.setImageResource(getSmileResId())
-            tvRequiredAnswers.text = String.format(
-                getString(R.string.required_score),
-                args.gameResult.gameSettings.minCountOfRightAnswers
-            )
-            tvScoreAnswers.text = String.format(
-                getString(R.string.score_answers),
-                args.gameResult.countOfRightAnswer
-            )
-            tvRequiredPercentage.text = String.format(
-                getString(R.string.required_percentage),
-                args.gameResult.gameSettings.minPercentOfRightAnswers
-            )
-            tvScorePercentage.text = String.format(
-                getString(R.string.score_percentage),
-                getPercentOfRightAnswers()
-            )
-        }
-    }
-
     // Функция для установки нужного BackStack
     private fun retryGame() {
         findNavController().popBackStack() // JepPuck Navigation
     }
-
-    private fun getPercentOfRightAnswers() = with(args.gameResult){
-        if(countOfQuestions == 0){
-            0
-        } else {
-            ((countOfRightAnswer / countOfQuestions.toDouble()) * 100).toInt()
-        }
-    }
-
-    private fun getSmileResId() : Int{
-        return if(args.gameResult.winner) {
-            R.drawable.ic_smile
-        } else {
-            R.drawable.ic_sad
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
