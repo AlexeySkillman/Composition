@@ -38,18 +38,6 @@ class GameFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
     }
 
-    // так как с кнопками придется работать не один раз делаем коллекцию из кнопок
-    private val tvOptions by lazy { // lazy - при первом обращение код проанализируется (И к этому моменту фрагмент уже будет собран когда будем обращаться)
-        mutableListOf<TextView>().apply{
-            add(binding.tvOption1)
-            add(binding.tvOption2)
-            add(binding.tvOption3)
-            add(binding.tvOption4)
-            add(binding.tvOption5)
-            add(binding.tvOption6)
-        }
-    }
-
     // Чтобы к элемнтам через binding нельзя было обращаться в не разрешенных Жизненых Цыклах
     // Используем метод Ниже через _binding переменую и binding + get
     private var _binding: FragmentGameBinding? = null
@@ -67,65 +55,21 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         observeViewModel()
-        setClickListenersToOptions()
     }
-
-    private fun setClickListenersToOptions(){
-        for (tvOption in tvOptions) {
-            tvOption.setOnClickListener{
-                viewModel.chooseAnswer(tvOption.text.toString().toInt())
-            }
-        }
-    }
-
 
     private fun observeViewModel(){
-        // в observe указываем параметр - viewLifecycleOwner
-        viewModel.question.observe(viewLifecycleOwner){
-            binding.tvSum.text = it.sum.toString()
-            binding.tvLeftNumber.text = it.visibleNumber.toString()
-            for(i in 0 until tvOptions.size){
-                tvOptions[i].text = it.options[i].toString()
-            }
-        }
-        viewModel.percentOfRightAnswers.observe(viewLifecycleOwner){
-            binding.progressBar.setProgress(it, true) // Анимация возможно только с Api 24 верссии Андроида
-        }
-        viewModel.enoughCount.observe(viewLifecycleOwner){
-            binding.tvAnswersProgress.setTextColor(getColorByState(it)) // Код обернули в функцию getColorByState(it)
-        }
-        viewModel.enoughPercent.observe(viewLifecycleOwner){
-            val color = getColorByState(it)
-            binding.progressBar.progressTintList = ColorStateList.valueOf(color)
-        }
-        viewModel.formattedTime.observe(viewLifecycleOwner){
-            binding.tvTimer.text = it
-        }
-        viewModel.minPercent.observe(viewLifecycleOwner){
-            binding.progressBar.secondaryProgress = it
-        }
         viewModel.gameResult.observe(viewLifecycleOwner){
             launchGameFinishedFragment(it) // Функция Вызова Следующего фрагмента GameFinishedFragment
-        }
-        viewModel.progressAnswers.observe(viewLifecycleOwner){
-            binding.tvAnswersProgress.text = it
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getColorByState(goodState: Boolean): Int{
-        val colorResId = if(goodState){
-            android.R.color.holo_green_light
-        } else {
-            android.R.color.holo_red_light
-
-        }
-        return ContextCompat.getColor(requireContext(),colorResId) // Вернет цвет в формате INT
     }
 
     // Функция Вызова Следующего фрагмента GameFinishedFragment
